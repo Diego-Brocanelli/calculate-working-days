@@ -2,6 +2,8 @@
 
 Calculate number of working days in a date range
 
+<a href="https://codeclimate.com/github/Diego-Brocanelli/calculate-working-days/maintainability"><img src="https://api.codeclimate.com/v1/badges/eb590106ff8f25a3580f/maintainability" /></a>
+
 ## Requirements
 
 - PHP >= 7.2
