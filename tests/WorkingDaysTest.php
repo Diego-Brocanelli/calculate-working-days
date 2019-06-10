@@ -185,6 +185,42 @@ final class WorkingDaysTest extends TestCase
         );
     }
 
+    public function testToCalculateSameDayButNotWorkingDay() : void
+    {
+        //Total: 01 days
+        //Work days: 01
+        $day =  (new WorkingDays(
+            '2019-06-08',
+            '2019-06-08'
+        ) )->calculate();
+
+        $this->assertEquals(
+            0,
+            $day->getNumber()
+        );
+
+        $daysList = $day->getDayList();
+
+        $this->assertTrue(empty($daysList));
+
+        //Total: 01 days
+        //Work days: 01
+        $day =  (new WorkingDays(
+            '2019-06-06',
+            '2019-06-06',
+            ['2019-06-06']
+        ) )->calculate();
+
+        $this->assertEquals(
+            0,
+            $day->getNumber()
+        );
+
+        $daysList = $day->getDayList();
+
+        $this->assertTrue(empty($daysList));
+    }
+
     public function testToCalculateInvalidArgumentsDtStart() : void
     {
         $this->expectException(\InvalidArgumentException::class);

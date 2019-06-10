@@ -21,6 +21,7 @@ class WorkingDays
     private $dateStart;
     private $dateEnd;
     private $holidays;
+    private $diff;
 
     private $number = 0;
     private $daysList;
@@ -36,57 +37,78 @@ class WorkingDays
             throw new InvalidArgumentException(self::INVALID_ARGUMENT);
         }
 
-        $this->dateStart = $dateStart;
-        $this->dateEnd   = $dateEnd;
+        $this->dateStart = new DateTime($dateStart);
+        $this->dateEnd   = new DateTime($dateEnd);
+        $this->diff      = $this->dateStart->diff($this->dateEnd);
         $this->holidays  = $holidays;
-    }
 
-    public function calculate()
-    {
-        $dtStart = new DateTime($this->dateStart);
-        $dtEnd   = new DateTime($this->dateEnd);
-
-        $diff = $dtStart->diff($dtEnd);
-
-        if($diff->invert == 1){
+        if($this->diff->invert == 1){
             throw new Exception( self::INVALID_DATE_ORDER );
         }
+    }
 
-        $weekDay = $dtStart->format('w');
-        if($weekDay != self::SUNDAY && $weekDay != self::SATURDAY){
-            $this->daysList[] =  $dtStart->format('Y-m-d');
-            $this->number += 1;
-        }
-
-        if($diff->days == 0 ){
+    /**
+     * Calculate working days
+     *
+     * @return this
+     */
+    public function calculate()
+    {
+        if($this->diff->days == 0 && in_array( $this->dateStart->format('Y-m-d'), $this->holidays )){
             return $this;
         }
 
+        $this->analyzeTheDay();
+
         $interval = 1;
-        for($interval; $interval <= $diff->days; $interval++){
+        for($interval; $interval <= $this->diff->days; $interval++){
 
-            $dtStart->modify('+1 day');
+            $this->dateStart->modify('+1 day');
 
-            $weekDay   = $dtStart->format('w');
-            $dtAnalize = $dtStart->format('Y-m-d');
+            $weekDay   = $this->dateStart->format('w');
+            $dtAnalize = $this->dateStart->format('Y-m-d');
             if($weekDay == self::SUNDAY || $weekDay == self::SATURDAY || in_array( $dtAnalize, $this->holidays )){
                 continue;
             }
 
-            $this->daysList[] =  $dtStart->format('Y-m-d');
+            $this->daysList[] =  $this->dateStart->format('Y-m-d');
             $this->number += 1;
         }
 
         return $this;
     }
 
+    /**
+     * Return the quantity working days
+     *
+     * @return int
+     */
     public function getNumber()
     {
         return $this->number;
     }
 
+    /**
+     * Return the working days list
+     *
+     * @return array[WorkingDays]
+     */
     public function getDayList()
     {
         return $this->daysList;
+    }
+
+    /**
+     * Responsible for analyzing whether the starting day is Saturday or Sunday
+     *
+     * @return void
+     */
+    private function analyzeTheDay()
+    {
+        $weekDay = $this->dateStart->format('w');
+        if($weekDay != self::SUNDAY && $weekDay != self::SATURDAY){
+            $this->daysList[] =  $this->dateStart->format('Y-m-d');
+            $this->number += 1;
+        }
     }
 }
