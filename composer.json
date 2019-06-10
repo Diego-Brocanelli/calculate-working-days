@@ -1,0 +1,29 @@
+{
+    "name": "diego/calculate-working-days",
+    "description": "Responsible for calculating working days between a date range",
+    "type": "component",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Diego Brocanelli",
+            "email": "contato@diegobrocanelli.com.br"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "DiegoBrocanelli\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3@dev",
+        "symfony/var-dumper": "^5.0@dev"
+    },
+    "scripts":{
+        "server":"php -S localhost:8080 public/index.php",
+        "tests":"vendor/bin/phpunit tests/"
+    }
+}
