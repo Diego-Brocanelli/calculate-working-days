@@ -6,6 +6,7 @@ namespace DiegoBrocanelli\Calculate;
 use InvalidArgumentException;
 use DateTime;
 use Exception;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @author Diego Brocanelli <contato@diegobrocanelli.com.br>
@@ -54,7 +55,7 @@ class WorkingDays
      */
     public function calculate()
     {
-        if($this->diff->days == 0 && in_array( $this->dateStart->format('Y-m-d'), $this->holidays )){
+        if( $this->checkStartDayIsHoliDay() ){
             return $this;
         }
 
@@ -67,7 +68,8 @@ class WorkingDays
 
             $weekDay   = $this->dateStart->format('w');
             $dtAnalize = $this->dateStart->format('Y-m-d');
-            if($weekDay == self::SUNDAY || $weekDay == self::SATURDAY || in_array( $dtAnalize, $this->holidays )){
+
+            if($weekDay == self::SUNDAY || $weekDay == self::SATURDAY || $this->checkHolidayList($dtAnalize) ){
                 continue;
             }
 
@@ -103,12 +105,37 @@ class WorkingDays
      *
      * @return void
      */
-    private function analyzeTheDay()
+    private function analyzeTheDay() : void
     {
         $weekDay = $this->dateStart->format('w');
         if($weekDay != self::SUNDAY && $weekDay != self::SATURDAY){
             $this->daysList[] =  $this->dateStart->format('Y-m-d');
             $this->number += 1;
         }
+    }
+
+    /**
+     * Responsible for  holiday list check
+     *
+     * @param  string $day
+     * @return boolean
+     */
+    private function checkHolidayList($day) : bool
+    {
+        return in_array( $day, $this->holidays );
+    }
+
+    /**
+     * Responsible for  check the start day is holiday
+     *
+     * @return boolean
+     */
+    private function checkStartDayIsHoliDay() : bool
+    {
+        if($this->diff->days == 0 && $this->checkHolidayList($this->dateStart->format('Y-m-d') ) ){
+            return true;
+        }
+
+        return false;
     }
 }
