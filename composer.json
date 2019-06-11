@@ -1,5 +1,5 @@
 {
-    "name": "diego/calculate-working-days",
+    "name": "diego-brocanelli/calculate-working-days",
     "description": "Responsible for calculating working days between a date range",
     "type": "component",
     "license": "MIT",
