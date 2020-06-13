@@ -1,38 +1,37 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace DiegoBrocanelli\Calculate;
 
-use InvalidArgumentException;
+use DiegoBrocanelli\Calculate\WorkingDaysInterface;
+use DiegoBrocanelli\Checker\Holiday as HolidayChecker;
 use DateTime;
+use DateInterval;
 use Exception;
-use phpDocumentor\Reflection\Types\Boolean;
+use InvalidArgumentException;
 
 /**
- * @author Diego Brocanelli <contato@diegobrocanelli.com.br>
+ * @author Diego Brocanelli <diegod2@msn.com>
  */
-class WorkingDays
+class WorkingDays implements WorkingDaysInterface
 {
-    const SATURDAY = 6;
-    const SUNDAY   = 0;
-
+    const SATURDAY           = 6;
+    const SUNDAY             = 0;
     const INVALID_ARGUMENT   = 'the argument entered is not valid';
     const INVALID_DATE_ORDER = 'start date can not exceed end date';
 
-    private $dateStart;
-    private $dateEnd;
-    private $holidays;
-    private $diff;
-
-    private $number = 0;
-    private $daysList;
+    private DateTime $dateStart;
+    private DateTime $dateEnd;
+    private array $holidays;
+    private DateInterval $diff;
+    private int $number = 0;
+    private array $daysList = [];
 
     /**
      * @param string $dateStart format Y-m-d
-     * @param stirng $dateEnd   format Y-m-d
-     * @param array $holidays   default empty
+     * @param stirng $dateEnd format Y-m-d
+     * @param array $holidays default empty
      */
-    public function __construct($dateStart, $dateEnd, $holidays = [])
+    public function __construct($dateStart, $dateEnd, $holidays = []) : void
     {
         if(empty($dateStart) || empty($dateEnd) || !is_array($holidays)){
             throw new InvalidArgumentException(self::INVALID_ARGUMENT);
@@ -53,9 +52,15 @@ class WorkingDays
      *
      * @return this
      */
-    public function calculate()
+    public function calculate() : WorkingDays
     {
-        if( $this->checkStartDayIsHoliDay() ){
+        $startDayIsHoliDay = ( new HolidayChecker )->checkStartDayIsHoliDay(
+            $this->diff->days, 
+            $this->dateStart->format('Y-m-d'), 
+            $this->holidays 
+        );
+
+        if( $startDayIsHoliDay ){
             return $this;
         }
 
@@ -69,7 +74,11 @@ class WorkingDays
             $weekDay   = $this->dateStart->format('w');
             $dtAnalize = $this->dateStart->format('Y-m-d');
 
-            if($weekDay == self::SUNDAY || $weekDay == self::SATURDAY || $this->checkHolidayList($dtAnalize) ){
+            if (
+                $weekDay == self::SUNDAY || 
+                $weekDay == self::SATURDAY || 
+                ( new HolidayChecker )->checkHolidayList($dtAnalize, $this->holidays) 
+            ) {
                 continue;
             }
 
@@ -85,7 +94,7 @@ class WorkingDays
      *
      * @return int
      */
-    public function getNumber()
+    public function getNumber() : int
     {
         return $this->number;
     }
@@ -93,9 +102,9 @@ class WorkingDays
     /**
      * Return the working days list
      *
-     * @return array[WorkingDays]
+     * @return array
      */
-    public function getDayList()
+    public function getDayList() : array
     {
         return $this->daysList;
     }
@@ -109,33 +118,8 @@ class WorkingDays
     {
         $weekDay = $this->dateStart->format('w');
         if($weekDay != self::SUNDAY && $weekDay != self::SATURDAY){
-            $this->daysList[] =  $this->dateStart->format('Y-m-d');
+            $this->daysList[] = $this->dateStart->format('Y-m-d');
             $this->number += 1;
         }
-    }
-
-    /**
-     * Responsible for  holiday list check
-     *
-     * @param  string $day
-     * @return boolean
-     */
-    private function checkHolidayList($day) : bool
-    {
-        return in_array( $day, $this->holidays );
-    }
-
-    /**
-     * Responsible for  check the start day is holiday
-     *
-     * @return boolean
-     */
-    private function checkStartDayIsHoliDay() : bool
-    {
-        if($this->diff->days == 0 && $this->checkHolidayList($this->dateStart->format('Y-m-d') ) ){
-            return true;
-        }
-
-        return false;
     }
 }
