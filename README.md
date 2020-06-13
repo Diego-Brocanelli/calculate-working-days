@@ -6,7 +6,7 @@ Calculate number of working days in a date range
 
 ## Requirements
 
-- PHP >= 7.2
+- PHP >= 7.4
 - Composer
 
 ## Instalation
