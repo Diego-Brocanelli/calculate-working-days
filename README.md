@@ -21,10 +21,12 @@ composer install
 composer tests
 ```
 
-## Code Analyses
+## Code Analysis
+
+The command below will run PHPStan level 4 analysis.
 
 ```bash
-composer code-analyses
+composer code-analysis
 ```
 
 ## Examples
