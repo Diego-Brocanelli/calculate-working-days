@@ -2,7 +2,7 @@
 
 Calculate number of working days in a date range
 
-<a href="https://codeclimate.com/github/Diego-Brocanelli/calculate-working-days/maintainability"><img src="https://api.codeclimate.com/v1/badges/eb590106ff8f25a3580f/maintainability" /></a>
+[![Maintainability](https://api.codeclimate.com/v1/badges/eb590106ff8f25a3580f/maintainability)](https://codeclimate.com/github/Diego-Brocanelli/calculate-working-days/maintainability)
 
 ## Requirements
 
@@ -21,17 +21,13 @@ composer install
 composer tests
 ```
 
-## Examples
+## Code Analyses
 
-
-#### A simple interval
-
-```php
-$days = (new WorkingDays('2019-06-06', '2019-06-11'))->calculate();
-
-$days->getNumber(); //output: 04
-$days->getDayList(); //output: ['2019-06-06', '2019-06-07', '2019-06-10', '2019-06-11']
+```bash
+composer code-analyses
 ```
+
+## Examples
 
 
 #### A simple interval

@@ -237,7 +237,7 @@ final class WorkingDaysTest extends TestCase
 
     public function testToCalculateInvalidArgumentsHolidays() : void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
 
         new WorkingDays('2019-06-11', '2019-06-11', '');
     }

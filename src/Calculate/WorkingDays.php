@@ -28,12 +28,12 @@ class WorkingDays implements WorkingDaysInterface
 
     /**
      * @param string $dateStart format Y-m-d
-     * @param stirng $dateEnd format Y-m-d
+     * @param string $dateEnd format Y-m-d
      * @param array $holidays default empty
      */
-    public function __construct($dateStart, $dateEnd, $holidays = []) : void
+    public function __construct( string $dateStart, string $dateEnd, array $holidays = [])
     {
-        if(empty($dateStart) || empty($dateEnd) || !is_array($holidays)){
+        if( empty($dateStart) || empty($dateEnd) ){
             throw new InvalidArgumentException(self::INVALID_ARGUMENT);
         }
 
@@ -50,7 +50,7 @@ class WorkingDays implements WorkingDaysInterface
     /**
      * Calculate working days
      *
-     * @return this
+     * @return WorkingDays
      */
     public function calculate() : WorkingDays
     {
