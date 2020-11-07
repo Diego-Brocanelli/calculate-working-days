@@ -26,6 +26,6 @@
     "scripts":{
         "server":"php -S localhost:8080 public/index.php",
         "tests":"vendor/bin/phpunit tests/",
-        "code-analyse":"vendor/bin/phpstan analyse src tests --level=4"
+        "code-analysis":"vendor/bin/phpstan analyse src tests --level=4"
     }
 }
