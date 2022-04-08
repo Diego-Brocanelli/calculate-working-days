@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DiegoBrocanelli\Calculate;
 
@@ -7,7 +9,7 @@ namespace DiegoBrocanelli\Calculate;
  */
 interface WorkingDaysInterface
 {
-    public function calculate() : WorkingDays;
-    public function getNumber() : int;
-    public function getDayList() : array;
+    public function calculate(): WorkingDays;
+    public function getNumber(): int;
+    public function getDayList(): array;
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DiegoBrocanelli\Checker;
 
@@ -14,9 +16,9 @@ class Holiday
      * @param array $holidays
      * @return boolean
      */
-    public function checkHolidayList(string $day, array $holidays) : bool
+    public function checkHolidayList(string $day, array $holidays): bool
     {
-        return in_array( $day, $holidays );
+        return in_array($day, $holidays);
     }
 
     /**
@@ -24,9 +26,9 @@ class Holiday
      *
      * @return boolean
      */
-    public function checkStartDayIsHoliDay(int $dayDiff, string $dateStart, array $holidays) : bool
+    public function checkStartDayIsHoliDay(int $dayDiff, string $dateStart, array $holidays): bool
     {
-        if ( $dayDiff == 0 && $this->checkHolidayList( $dateStart, $holidays ) ) {
+        if ($dayDiff == 0 && $this->checkHolidayList($dateStart, $holidays)) {
             return true;
         }
 
